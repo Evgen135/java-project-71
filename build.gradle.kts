@@ -1,6 +1,7 @@
 plugins {
     id("java")
     id("io.github.ben-manes.versions") version "0.67.0"
+    application
 }
 
 group = "hexlet.code"
@@ -10,10 +11,16 @@ repositories {
     mavenCentral()
 }
 
+application {
+    mainClass = "hexlet.code.App"
+}
+
 dependencies {
     testImplementation(platform("org.junit:junit-bom:6.1.3"))
     testImplementation("org.junit.jupiter:junit-jupiter")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+
+    implementation("info.picocli:picocli:4.7.7")
 }
 
 tasks.test {
