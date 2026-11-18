@@ -7,4 +7,11 @@ install:
 run-dist:
 	.\build\install\app\bin\app.bat
 
-.PHONY: build
+
+run-dist-h:
+	.\build\install\app\bin\app.bat -h
+
+run-dist-V:
+	.\build\install\app\bin\app.bat -V
+
+.PHONY: build install run-dist run-dist-h run-dist-V

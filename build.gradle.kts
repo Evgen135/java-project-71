@@ -21,6 +21,7 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("info.picocli:picocli:4.7.7")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.23.0")
 }
 
 tasks.test {
