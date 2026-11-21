@@ -14,4 +14,7 @@ run-dist-h:
 run-dist-V:
 	.\build\install\app\bin\app.bat -V
 
-.PHONY: build install run-dist run-dist-h run-dist-V
+run-gendiff:
+	.\build\install\app\bin\app.bat filesExample/file1.json filesExample/file2.json
+
+.PHONY: build install

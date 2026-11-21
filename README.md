@@ -22,7 +22,8 @@ cd java-project-71
 
 ## Использование
 
-![img.png](img.png)
+![img.png](images/img.png)
+
 
 ---
 
