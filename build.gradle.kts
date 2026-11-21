@@ -23,7 +23,9 @@ dependencies {
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation("info.picocli:picocli:4.7.7")
-    implementation("com.fasterxml.jackson.core:jackson-databind:2.23.0")
+    implementation("tools.jackson.core:jackson-databind:3.2.3")
+    implementation("tools.jackson.dataformat:jackson-dataformats-text:3.2.3")
+    implementation("tools.jackson.dataformat:jackson-dataformat-yaml:3.2.3")
 }
 
 spotless {
@@ -56,16 +58,6 @@ tasks.jacocoTestReport {
         html.required.set(true)
     }
 }
-
-tasks.jacocoTestReport {
-    dependsOn(tasks.test)
-
-    reports {
-        xml.required.set(true)
-        html.required.set(true)
-    }
-}
-
 
 tasks.jacocoTestCoverageVerification {
     dependsOn(tasks.jacocoTestReport)

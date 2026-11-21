@@ -1,16 +1,18 @@
 package hexlet.code;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
+import static hexlet.code.Parser.parser;
 
 public class Differ {
 
   public static String generate(String filePath1, String filePath2) throws Exception {
+
     Map<String, Object> parseFile1 = getData(filePath1);
     Map<String, Object> parseFile2 = getData(filePath2);
 
@@ -41,14 +43,11 @@ public class Differ {
     return diff.toString();
   }
 
-  // читает путь к файлу и передает строку с содержимым файла
   public static Map<String, Object> getData(String filePath) throws Exception {
-    String content = Files.readString(Paths.get(filePath));
-    return new ObjectMapper().readValue(content, Map.class);
-  }
+    String content = Files.readString(Paths.get(filePath).normalize());
+    int indFormat = filePath.lastIndexOf(".")+1;
+    String format = filePath.substring(indFormat);
 
-  // записывает данные файла в map
-  //  public static Map<String, Object> parse(String content) throws Exception {
-  //    return new ObjectMapper().readValue(content, Map.class);
-  //  }
+    return parser(content,format);
+  }
 }

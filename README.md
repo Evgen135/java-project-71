@@ -24,6 +24,8 @@ cd java-project-71
 
 ![img.png](images/img.png)
 
+![img_1.png](img_1.png)
+
 
 ---
 
