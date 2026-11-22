@@ -1,13 +1,13 @@
 package hexlet.code;
 
+import static hexlet.code.Parser.parser;
+
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import java.util.TreeSet;
-import static hexlet.code.Parser.parser;
 
 public class Differ {
 
@@ -45,9 +45,9 @@ public class Differ {
 
   public static Map<String, Object> getData(String filePath) throws Exception {
     String content = Files.readString(Paths.get(filePath).normalize());
-    int indFormat = filePath.lastIndexOf(".")+1;
+    int indFormat = filePath.lastIndexOf(".") + 1;
     String format = filePath.substring(indFormat);
 
-    return parser(content,format);
+    return parser(content, format);
   }
 }
