@@ -1,53 +1,39 @@
 package hexlet.code;
 
+import static hexlet.code.Formatter.*;
 import static hexlet.code.Parser.parser;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class Differ {
 
-  public static String generate(String filePath1, String filePath2) throws Exception {
+    public static String generate(String filePath1, String filePath2, String format)
+            throws Exception {
 
-    Map<String, Object> parseFile1 = getData(filePath1);
-    Map<String, Object> parseFile2 = getData(filePath2);
+        String result;
+        Map<String, Object> parseFile1 = getData(filePath1);
+        Map<String, Object> parseFile2 = getData(filePath2);
 
-    Set<String> sortKeys = new TreeSet<>();
-    sortKeys.addAll(parseFile1.keySet());
-    sortKeys.addAll(parseFile2.keySet());
-    StringBuilder diff = new StringBuilder("\n{\n");
-    for (String key : sortKeys) {
-      boolean containkeys1 = parseFile1.containsKey(key);
-      boolean containkeys2 = parseFile2.containsKey(key);
-
-      if (containkeys1 && containkeys2) {
-        if (Objects.equals(parseFile1.get(key), parseFile2.get(key))) {
-          diff.append("    " + key + ": " + parseFile2.get(key) + "\n");
+        if (format.equals("plain")) {
+            result = plainFormat(parseFile1, parseFile2);
         } else {
-          diff.append("  - " + key + ": " + parseFile1.get(key) + "\n");
-          diff.append("  + " + key + ": " + parseFile2.get(key) + "\n");
+            result = stylishFormat(parseFile1, parseFile2);
         }
 
-      } else if (containkeys1 && !containkeys2) {
-        diff.append("  - " + key + ": " + parseFile1.get(key) + "\n");
-      } else if (!containkeys1 && containkeys2) {
-        diff.append("  + " + key + ": " + parseFile2.get(key) + "\n");
-      }
+        return result;
     }
-    diff.append("}");
 
-    return diff.toString();
-  }
+    public static String generate(String filePath1, String filePath2) throws Exception {
+        return generate(filePath1, filePath2, "stylish");
+    }
 
-  public static Map<String, Object> getData(String filePath) throws Exception {
-    String content = Files.readString(Paths.get(filePath).normalize());
-    int indFormat = filePath.lastIndexOf(".") + 1;
-    String format = filePath.substring(indFormat);
+    public static Map<String, Object> getData(String filePath) throws Exception {
+        String content = Files.readString(Paths.get(filePath).normalize());
+        int indFormat = filePath.lastIndexOf(".") + 1;
+        String format = filePath.substring(indFormat);
 
-    return parser(content, format);
-  }
+        return parser(content, format);
+    }
 }

@@ -30,7 +30,11 @@ dependencies {
 
 spotless {
     java {
-        googleJavaFormat()
+        importOrder()
+        removeUnusedImports()
+        googleJavaFormat().aosp()
+        formatAnnotations()
+        leadingTabsToSpaces(4)
     }
 }
 
