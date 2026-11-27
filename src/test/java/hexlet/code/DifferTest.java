@@ -7,57 +7,61 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 public class DifferTest {
 
-    private final String expectedResult =
-            """
+    private String readFixture(String fileName) throws Exception {
+        Path path =
+                Paths.get("src/test/resources/filesExample", fileName).toAbsolutePath().normalize();
+        return Files.readString(path).replace("\r\n", "\n").trim();
+    }
 
-            {
-              - follow: false
-                host: hexlet.io
-              - proxy: 123.234.53.22
-              - timeout: 50
-              + timeout: 20
-              + verbose: true
-            }\
-            """;
+    @ParameterizedTest
+    @ValueSource(strings = {"json", "yaml"})
+    public void getDataTest(String format) throws Exception {
+        Map<String, Object> expected = new HashMap<>();
+        expected.put("setting1", "Some value");
+        expected.put("setting2", 200);
+        expected.put("setting3", true);
+        expected.put("key1", "value1");
+        expected.put("numbers1", List.of(1, 2, 3, 4));
+        expected.put("numbers2", List.of(2, 3, 4, 5));
+        expected.put("id", 45);
+        expected.put("default", null);
+        expected.put("checked", false);
+        expected.put("numbers3", List.of(3, 4, 5));
+        expected.put("chars1", List.of("a", "b", "c"));
+        expected.put("chars2", List.of("d", "e", "f"));
+        Map<String, Object> valueTest = getData("src/test/resources/filesExample/file1." + format);
 
-    private final Map<String, Object> expectedResultPars =
-            Map.of("host", "hexlet.io", "timeout", 50, "proxy", "123.234.53.22", "follow", false);
-
-    @Test
-    public void getDataJsonTest() throws Exception {
-        Map<String, Object> valueTest = getData("src/test/resources/filesExample/file1.json");
-
-        assertEquals(expectedResultPars, valueTest);
+        assertEquals(expected, valueTest);
     }
 
     @Test
-    public void getDataYamiTest() throws Exception {
-        Map<String, Object> valueTest = getData("src/test/resources/filesExample/file4.yaml");
-
-        assertEquals(expectedResultPars, valueTest);
-    }
-
-    @Test
-    public void generateJsonTest() throws Exception {
+    public void generateTest() throws Exception {
         String valueTest =
                 generate(
                         "src/test/resources/filesExample/file1.json",
                         "src/test/resources/filesExample/file2.json");
-        assertEquals(expectedResult, valueTest);
+        assertEquals(readFixture("expected_stylish.txt"), valueTest);
     }
 
     @Test
-    public void generateYamiTest() throws Exception {
+    public void generateYamlTest() throws Exception {
         String valueTest =
                 generate(
-                        "src/test/resources/filesExample/file4.yaml",
-                        "src/test/resources/filesExample/file3.yaml");
-        assertEquals(expectedResult, valueTest);
+                        "src/test/resources/filesExample/file1.yaml",
+                        "src/test/resources/filesExample/file2.yaml");
+        assertEquals(readFixture("expected_stylish.txt"), valueTest);
     }
 
     @Test

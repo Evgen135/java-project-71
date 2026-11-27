@@ -1,53 +1,44 @@
 package hexlet.code;
 
+import static hexlet.code.Differ.getData;
 import static hexlet.code.Formatter.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
-import java.util.Set;
 import org.junit.jupiter.api.Test;
 
 public class FormatterTest {
 
-    private final Map<String, Object> parseFileTest1 =
-            Map.of("host", "hexlet.io", "timeout", 50, "proxy", "123.234.53.22", "follow", false);
-    private final Map<String, Object> parseFileTest2 =
-            Map.of("timeout", 20, "verbose", true, "host", "hexlet.io");
-
-    private final Set<String> sortKeysTest =
-            Set.of("follow", "host", "proxy", "timeout", "verbose");
-
-    @Test
-    public void stylishTest() {
-        String expectedResult =
-                """
-
-                {
-                  - follow: false
-                    host: hexlet.io
-                  - proxy: 123.234.53.22
-                  - timeout: 50
-                  + timeout: 20
-                  + verbose: true
-                }\
-                """;
-
-        String valueTest = stylishFormat(parseFileTest1, parseFileTest2);
-        assertEquals(expectedResult, valueTest);
+    private String readFixture(String fileName) throws Exception {
+        Path path =
+                Paths.get("src/test/resources/filesExample", fileName).toAbsolutePath().normalize();
+        return Files.readString(path).replace("\r\n", "\n").trim();
     }
 
     @Test
-    public void plainTest() {
-        String expectedResult =
-                """
+    public void stylishTest() throws Exception {
+        Map<String, Object> parseFile1 = getData("src/test/resources/filesExample/file1.json");
+        Map<String, Object> parseFile2 = getData("src/test/resources/filesExample/file2.json");
+        String valueTest = stylishFormat(parseFile1, parseFile2);
+        assertEquals(readFixture("expected_stylish.txt"), valueTest);
+    }
 
-                Property 'follow' was removed
-                Property 'proxy' was removed
-                Property 'timeout' was updated. From 50 to 20
-                Property 'verbose' was added with value: true
-                """;
+    @Test
+    public void plainTest() throws Exception {
+        Map<String, Object> parseFile1 = getData("src/test/resources/filesExample/file1.json");
+        Map<String, Object> parseFile2 = getData("src/test/resources/filesExample/file2.json");
+        String valueTest = plainFormat(parseFile1, parseFile2);
+        assertEquals(readFixture("expected_plain.txt"), valueTest);
+    }
 
-        String valueTest = plainFormat(parseFileTest1, parseFileTest2);
-        assertEquals(expectedResult, valueTest);
+    @Test
+    public void jsonTest() throws Exception {
+        Map<String, Object> parseFile1 = getData("src/test/resources/filesExample/file1.json");
+        Map<String, Object> parseFile2 = getData("src/test/resources/filesExample/file2.json");
+        String valueTest = jsonFormat(parseFile1, parseFile2);
+        assertEquals(readFixture("expected_json.txt"), valueTest);
     }
 }

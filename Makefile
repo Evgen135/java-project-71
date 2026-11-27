@@ -1,4 +1,5 @@
 build:
+	.\gradlew spotlessApply
 	.\gradlew clean build
 
 install:

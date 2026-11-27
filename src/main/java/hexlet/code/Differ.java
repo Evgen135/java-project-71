@@ -16,13 +16,11 @@ public class Differ {
         Map<String, Object> parseFile1 = getData(filePath1);
         Map<String, Object> parseFile2 = getData(filePath2);
 
-        if (format.equals("plain")) {
-            result = plainFormat(parseFile1, parseFile2);
-        } else {
-            result = stylishFormat(parseFile1, parseFile2);
-        }
-
-        return result;
+        return switch (format) {
+            case "plain" -> plainFormat(parseFile1, parseFile2);
+            case "stylish" -> stylishFormat(parseFile1, parseFile2);
+            default -> throw new Exception("Invalid format");
+        };
     }
 
     public static String generate(String filePath1, String filePath2) throws Exception {
